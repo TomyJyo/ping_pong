@@ -106,7 +106,7 @@ for (let index = 0; index < 3; index++) {
 basic.forever(function () {
     point = 0
     customEditor.addMemo("interval はﾎﾞｰﾙの移動間隔(ﾐﾘ秒)、step は短くする間隔(ﾐﾘ秒)で徐々に早くなります。")
-    interval = 1000
+    interval = 800
     interval_step = 10
     customEditor.addMemo("ball_x,ball_y はｹﾞｰﾑ開始時のﾎﾞｰﾙの位置")
     ball_x = 3
@@ -116,7 +116,14 @@ basic.forever(function () {
     ball_dy = -1
     customEditor.addMemo("bar_x はｹﾞｰﾑ開始時のﾗｹｯﾄの位置")
     bar_x = 0
-    basic.showString("GO!")
+    music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.rest(music.beat(BeatFraction.Half))
+    music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.rest(music.beat(BeatFraction.Half))
+    music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+    music.rest(music.beat(BeatFraction.Half))
+    music.play(music.tonePlayable(523, music.beat(BeatFraction.Double)), music.PlaybackMode.InBackground)
+    basic.showString("GO")
     led.plot(ball_x, ball_y)
     led.plot(bar_x, 4)
     led.plot(bar_x + 1, 4)
