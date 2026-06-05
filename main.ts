@@ -45,6 +45,23 @@ input.onButtonPressed(Button.A, function () {
         led.plot(bar_x, 4)
     }
 })
+function BGM (sound: string) {
+    if (sound == "go") {
+        music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+        music.rest(music.beat(BeatFraction.Half))
+        music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+        music.rest(music.beat(BeatFraction.Half))
+        music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
+        music.rest(music.beat(BeatFraction.Half))
+        music.play(music.tonePlayable(523, music.beat(BeatFraction.Double)), music.PlaybackMode.InBackground)
+    } else if (sound == "wall") {
+        music.play(music.tonePlayable(392, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+    } else if (sound == "racket") {
+        music.play(music.tonePlayable(784, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+    } else if (sound == "over") {
+        music._playDefaultBackground(music.builtInPlayableMelody(Melodies.Dadadadum), music.PlaybackMode.InBackground)
+    }
+}
 input.onButtonPressed(Button.B, function () {
     customEditor.addMemo("【機能】ﾗｹｯﾄを右に1つｽﾗｲﾄﾞ")
     customEditor.addMemo("ﾗｹｯﾄは左右2つLEDで構成し位置は左端で示す")
@@ -116,13 +133,7 @@ basic.forever(function () {
     ball_dy = -1
     customEditor.addMemo("bar_x はｹﾞｰﾑ開始時のﾗｹｯﾄの位置")
     bar_x = 0
-    music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
-    music.rest(music.beat(BeatFraction.Half))
-    music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
-    music.rest(music.beat(BeatFraction.Half))
-    music.play(music.tonePlayable(262, music.beat(BeatFraction.Half)), music.PlaybackMode.UntilDone)
-    music.rest(music.beat(BeatFraction.Half))
-    music.play(music.tonePlayable(523, music.beat(BeatFraction.Double)), music.PlaybackMode.InBackground)
+    BGM("go")
     basic.showString("GO")
     led.plot(ball_x, ball_y)
     led.plot(bar_x, 4)
@@ -132,21 +143,21 @@ basic.forever(function () {
     while (in_game) {
         if (ball_x + ball_dx > 4) {
             customEditor.addMemo("ﾎﾞｰﾙの次の位置が右壁なら、横の移動方向を反転させる")
-            music.play(music.tonePlayable(392, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+            BGM("wall")
             ball_dx = ball_dx * -1
         } else if (ball_x + ball_dx < 0) {
             customEditor.addMemo("ﾎﾞｰﾙの次の位置が左壁なら、横の移動方向を反転させる")
-            music.play(music.tonePlayable(392, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+            BGM("wall")
             ball_dx = ball_dx * -1
         }
         if (ball_y + ball_dy < 0) {
             customEditor.addMemo("ﾎﾞｰﾙの次の位置が上壁なら、縦の移動方向を反転させる")
-            music.play(music.tonePlayable(392, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+            BGM("wall")
             ball_dy = ball_dy * -1
         } else if (ball_y + ball_dy > 3) {
             if (led.point(ball_x + ball_dx, ball_y + ball_dy)) {
                 customEditor.addMemo("ﾎﾞｰﾙの次の位置がﾗｹｯﾄで点灯していれば当たったことになり、縦の移動方向の反転とﾎﾟｲﾝﾄをｶｳﾝﾄｱｯﾌﾟする")
-                music.play(music.tonePlayable(784, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+                BGM("racket")
                 ball_dy = ball_dy * -1
                 point = point + 1
                 if (interval - interval_step >= 0) {
@@ -168,7 +179,7 @@ basic.forever(function () {
             basic.pause(interval)
         } else {
             game.setScore(point)
-            music._playDefaultBackground(music.builtInPlayableMelody(Melodies.Dadadadum), music.PlaybackMode.InBackground)
+            BGM("over")
             game.gameOver()
         }
     }
